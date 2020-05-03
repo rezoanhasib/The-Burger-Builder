@@ -1,5 +1,5 @@
 # TheBurgerBuilder
-A Burger Builder app(basic version) created using React-16.13.1
+A Burger Builder app created using React-16.13.1
 
 Project Details: 
 
