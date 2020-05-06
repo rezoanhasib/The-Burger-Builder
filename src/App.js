@@ -3,11 +3,12 @@ import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder'; 
 
 class App extends Component {
+
   render() {
     return (
       <div>
         <Layout>
-          <BurgerBuilder/>
+          <BurgerBuilder />
         </Layout>
       </div>
     );
@@ -15,4 +16,3 @@ class App extends Component {
 }
 
 export default App;
-//root component
