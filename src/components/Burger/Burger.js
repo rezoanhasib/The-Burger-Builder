@@ -3,6 +3,7 @@ import classes from './Burger.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient'; 
 
 const burger = (props) => {
+    console.log(props);
     //Here BurgerIngredient component is getting called for each entry on props.ingredient with the relevant key and type
     //for each entry in the ingredient object, the BurgerIngredient is getting called with the key and type
     let transformedIngredients = Object.keys(props.ingredients)

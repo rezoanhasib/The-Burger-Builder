@@ -31,6 +31,7 @@ class BurgerBuilder extends Component{
     }
 
     componentDidMount () {
+        console.log(this.props); 
         axios.get('https://react-my-burger-c0c84.firebaseio.com/ingredients.json')
             .then(response => {
                 this.setState({ingredients: response.data});
@@ -90,31 +91,22 @@ class BurgerBuilder extends Component{
     }
 
     purchaseContinueHandler = () => {
-        this.setState({ loading: true }); 
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Rezoan Hasib',
-                address: {
-                    street: 'Walton Ave',
-                    zip: '10452',
-                    country: 'USA'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest'
-        };
-        //backend call with the order. Whether call successful or not, loading is set to false to stop the spinner
-        //purchasing is set to false so the modal goes away
-        axios.post('/orders.json', order)
-        .then(response => {
-            this.setState({loading: false, purchasing: false});
-        })
-        .catch(error => {
-            this.setState({loading: false, purchasing: false});
+        
+        const queryParams = []; 
+        //after this for loop, the queryParams is something like [{salad = 1}, {bacon = 1}]
+        for(let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        //adding the totalprice with the queryParams array
+        queryParams.push('price=' + this.state.totalPrice); 
+        //lets convert the array into a string with array elements joined by '&'
+        const queryString = queryParams.join('&'); 
+
+        this.props.history.push({
+            pathname: '/checkout', 
+            search: '?' + queryString, 
         });
-        //backend call with the order. Whether call successful or not, loading is set to false to stop the spinner
+        
     }
 
     render(){
