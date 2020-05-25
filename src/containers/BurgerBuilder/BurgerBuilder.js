@@ -6,30 +6,21 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'; 
 import Modal from '../../components/UI/Modal/Modal'; 
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'; 
-import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'; 
-import * as actionTypes from '../../store/actions';
+import * as actions from '../../store/actions/index';
+import axios from '../../axios-orders';
 
 class BurgerBuilder extends Component{
 
     state = {
         //purchasing is added to show the modal if user clicks 'Order now'
         purchasing: false, 
-        //loading is added for the spinner
-        loading: false,
-        error: false,
     }
 
     componentDidMount () {
-        console.log(this.props); 
-        // axios.get('https://react-my-burger-c0c84.firebaseio.com/ingredients.json')
-        //     .then(response => {
-        //         this.setState({ingredients: response.data});
-        //     })
-        //     .catch(error => {
-        //         this.setState({error: true}); 
-        //     });
+        console.log(this.props);
+        this.props.onInitIngredients(); 
     }
 
     updatePurchaseState ( ingredients ) {
@@ -51,7 +42,8 @@ class BurgerBuilder extends Component{
         this.setState({purchasing: false}); 
     }
 
-    purchaseContinueHandler = () => {  
+    purchaseContinueHandler = () => { 
+        this.props.onInitPurchase(); 
         this.props.history.push('/checkout');      
     }
 
@@ -64,7 +56,7 @@ class BurgerBuilder extends Component{
         let orderSummary = null;
 
         //setting up burger 
-        let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />
+        let burger = this.props.error ? <p>Ingredients can't be loaded!</p> : <Spinner />
         if( this.props.ings ) {
             //setting up burger if ingredients now has updated values from backend
             burger = (
@@ -88,11 +80,6 @@ class BurgerBuilder extends Component{
         }
         //setting up burger 
 
-        //checking for loading after ingredients gets updated from backend
-        if(this.state.loading){
-            orderSummary = <Spinner />
-        }
-
         //if loading is false then render the ordersummary else render spinner
         return(
             <Aux>
@@ -107,15 +94,18 @@ class BurgerBuilder extends Component{
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients, 
-        price: state.totalPrice,
+        ings: state.burgerBuilder.ingredients, 
+        price: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error,
     }; 
 }; 
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
-        onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName}),
+        onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(actions.initIngredients()),
+        onInitPurchase: () => dispatch(actions.purchaseInit())
     }; 
 }
 
