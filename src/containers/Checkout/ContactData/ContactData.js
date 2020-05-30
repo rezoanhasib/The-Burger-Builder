@@ -108,8 +108,9 @@ class ContactData extends Component {
             ingredients: this.props.ings,
             price: this.props.price,
             orderData: formData,
+            userId: this.props.userId
         };
-        this.props.onOrderBurger(order); 
+        this.props.onOrderBurger(order, this.props.token); 
     }
 
     checkValidity(value, rules) {
@@ -118,17 +119,14 @@ class ContactData extends Component {
         if (rules.required) {
             isValid = value.trim() !== '' && isValid; 
         }
-
         //checking for the minLength rule of the zipcode 
         if (rules.minLength) {
             isValid = value.length >= rules.minLength && isValid;
         }
-
         //checking for the maxLength rule of the zipcode 
         if (rules.maxLength) {
             isValid = value.length <= rules.maxLength && isValid;
-        }
-       
+        }       
         return isValid; 
     }
 
@@ -157,7 +155,6 @@ class ContactData extends Component {
                 config: this.state.orderForm[key],
             });
         }
-
         let form = (
             <form onSubmit={this.orderHandler}>
                 {formElementsArray.map(formElement => (
@@ -191,13 +188,15 @@ const mapStateToProps = state => {
     return {
         ings: state.burgerBuilder.ingredients, 
         price: state.burgerBuilder.totalPrice,
-        loading: state.order.loading
+        loading: state.order.loading, 
+        token: state.auth.token, 
+        userId: state.auth.userId
     }
 }; 
 
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData))
+        onOrderBurger: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token))
     }; 
 }; 
 
