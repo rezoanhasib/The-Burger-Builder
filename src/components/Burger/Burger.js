@@ -3,7 +3,6 @@ import classes from './Burger.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient'; 
 
 const burger = (props) => {
-    console.log(props);
     //Here BurgerIngredient component is getting called for each entry on props.ingredient with the relevant key and type
     //for each entry in the ingredient object, the BurgerIngredient is getting called with the key and type
     let transformedIngredients = Object.keys(props.ingredients)
@@ -18,7 +17,6 @@ const burger = (props) => {
         //transformedIngredients now has one array element with all the empty spaces added together 
         //transformedIngredients is flattend to one value is to check if they array is empty or not. If empty, 
         //the below message is displayed
-    console.log(transformedIngredients);
     if(transformedIngredients.length === 0) {
         transformedIngredients = <p>Please start adding ingredients!</p>
     }

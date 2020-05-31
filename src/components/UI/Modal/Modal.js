@@ -9,16 +9,6 @@ class Modal extends Component {
     shouldComponentUpdate(nextProps, nextState){
         return this.props.show !== nextProps.show || nextProps.children !== this.props.children; 
     }
-
-    //deprecated 
-    // componentWillUpdate(){
-    //     console.log('[Modal] will update');
-    // }
-
-    componentDidUpdate () {
-        console.log('[Modal] updated');
-    }
-
     render() {
         return(
             <Aux>
